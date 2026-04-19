@@ -10,6 +10,8 @@ RUN npm ci
 COPY . .
 RUN npm run build
 
+RUN ls -la /app
+
 # ---- Production Stage ----
 FROM node:20-alpine AS runner
 WORKDIR /app
@@ -27,7 +29,6 @@ RUN addgroup -g 1001 -S nodejs && \
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
-COPY --from=builder /app/next.config.js ./
 
 # Set correct ownership
 RUN chown -R nextjs:nodejs /app
